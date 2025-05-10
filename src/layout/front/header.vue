@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
-import api from '@/request/index';
-import { storeToRefs } from 'pinia';
+// import api from '@/request/index';
+// import { storeToRefs } from 'pinia';
 import { useUserStore } from '@/pinia';
 import type { FormInstance } from 'element-plus';
 import { useRouter } from 'vue-router';
@@ -42,7 +42,7 @@ const loginFront = () => {
   centerDialogVisible.value = true;
 };
 
-const handleTabClick = (val) => {
+const handleTabClick = (val: any) => {
   console.log(val);
 };
 
@@ -111,10 +111,7 @@ const login = () => {
 
     <el-dialog v-model="centerDialogVisible" width="30%" center>
       <div>
-        <el-tabs
-          v-model="activeName"
-          @tab-click="handleTabClick"
-        >
+        <el-tabs v-model="activeName" @tab-click="handleTabClick">
           <el-tab-pane label="注册" name="registered">
             <el-form
               ref="loginFormRef"
