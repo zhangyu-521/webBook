@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import api from '@/request/index';
+import {getOrderByAcc,getorders} from '@/request/front';
 
 type Orders = Array<{
   id: number;
@@ -13,14 +13,16 @@ type Orders = Array<{
 type OrderInfo = {
   orders: Orders;
 };
-const data = await api<OrderInfo>('/api/getAllOrderInfos', 'GET');
+const data = await getOrderByAcc();
+const data2 = await getorders();
 
 console.log(data);
+console.log(data2)
 </script>
 
 <template>
   <div>
-    <el-card class="m-5" v-for="item in data?.orders" :key="item.id">
+    <!-- <el-card class="m-5" v-for="item in data?.orders" :key="item.id">
       <div class="flex items-center justify-between">
         <div>
           <p class="text-2xl mb-3">书名：{{ item.name }}</p>
@@ -35,6 +37,6 @@ console.log(data);
           <router-view></router-view>
         </div>
       </div>
-    </el-card>
+    </el-card> -->
   </div>
 </template>

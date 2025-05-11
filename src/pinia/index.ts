@@ -8,7 +8,8 @@ export const useUserStore = defineStore('main', () => {
 
     const userInfo = reactive({
         username: 'admin',
-        password: '123456'
+        password: '123456',
+        name: '张三'
     })
 
     return {

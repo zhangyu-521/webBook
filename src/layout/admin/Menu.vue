@@ -21,9 +21,9 @@
       <el-icon><User /></el-icon>
       <span>用户管理</span>
     </el-menu-item>
-    <el-menu-item @click="$router.push('/admin/announcementManage')">
+    <!-- <el-menu-item @click="$router.push('/admin/announcementManage')">
       <el-icon><Message /></el-icon>
       <span>系统公告管理</span>
-    </el-menu-item>
+    </el-menu-item> -->
   </el-menu>
 </template>

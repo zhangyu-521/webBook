@@ -1,41 +1,14 @@
 <script lang="ts" setup>
-import { reactive, ref } from 'vue';
-// import api from '@/request/index';
-// import { storeToRefs } from 'pinia';
+import { onMounted, reactive, ref } from 'vue';
+import {login as loginApi, signUp, Notices} from '@/request/front';
 import { useUserStore } from '@/pinia';
-import type { FormInstance } from 'element-plus';
+import { ElNotification, type FormInstance } from 'element-plus';
+
 import { useRouter } from 'vue-router';
 const { userInfo } = useUserStore();
 
-console.log(userInfo);
-
-// const res = await api('/api/typesinfo')
-// console.log(res)
-
 const value4 = ref([]);
 const activeName = ref('login');
-const options = [
-  {
-    value: 'Option1',
-    label: 'Option1',
-  },
-  {
-    value: 'Option2',
-    label: 'Option2',
-  },
-  {
-    value: 'Option3',
-    label: 'Option3',
-  },
-  {
-    value: 'Option4',
-    label: 'Option4',
-  },
-  {
-    value: 'Option5',
-    label: 'Option5',
-  },
-];
 const centerDialogVisible = ref(false);
 
 const loginFront = () => {
@@ -46,59 +19,77 @@ const handleTabClick = (val: any) => {
   console.log(val);
 };
 
+const registRule = {
+  account: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+  password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+  tel: [{ required: true, message: '请输入电话', trigger: 'blur' }],
+  email: [{ required: true, message: '请输入邮件', trigger: 'blur' }],
+  name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
+  sex: [{ required: true, message: '请输入性别', trigger: 'blur' }],
+};
 const loginRule = {
-  username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+  account: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
   password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
 };
 
-const router = useRouter();
-
 const loginFormRef = ref<FormInstance | null>(null);
+const registFormRef = ref<FormInstance | null>(null);
 
+const registForm = reactive({
+  account: '',
+  password: '',
+  tel: '',
+  email: '',
+  name: '',
+  balance: 0,
+  sex: '',  
+});
 const loginForm = reactive({
-  username: '',
+  account: '',
   password: '',
 });
 
-const login = () => {
-  loginFormRef?.value?.validate((valid) => {
+const login = async() => {
+  loginFormRef?.value?.validate(async(valid) => {
     // 校验通过
     if (valid) {
-      console.log(loginForm);
-      router.push('/admin');
+      if(activeName.value === 'login') {
+        const res = await loginApi(loginForm);
+        console.log(userInfo)
+        console.log(res)
+      } else {
+        const res = await signUp(registForm);
+        console.log(res)
+      }
+      centerDialogVisible.value = false;
     }
   });
 };
+
+onMounted(async () => {
+  const res:any =  await Notices()
+  let data = res.notices[res.notices.length - 1]
+  console.log(res.notices[res.notices.length - 1])
+  ElNotification({
+    title: data.title,
+    message: data.detail,
+    duration: 0,
+  })
+})
 </script>
 
 <template>
   <div class="w-full h-full flex items-center justify-between">
     <!-- logo -->
-    <div class="flex justify-center items-center gap-2">
+    <div @click="$router.push('/booksIndex')" class="flex justify-center items-center gap-2 cursor-pointer">
       <img src="@/assets/vue.svg" alt="logo" />
       <h1>图书系统</h1>
     </div>
     <!-- 搜索 -->
-    <div>
-      <el-select
-        v-model="value4"
-        multiple
-        collapse-tags
-        collapse-tags-tooltip
-        :max-collapse-tags="5"
-        placeholder="选择类型"
-        style="width: 300px"
-      >
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
-      </el-select>
-    </div>
+
     <!-- 右侧  -->
     <div class="flex items-center gap-2 cursor-pointer">
+      <span @click="$router.push('/orders')">订单</span>
       <span @click="$router.push('/admin/login')">后台</span>
       <el-icon
         class="cursor-pointer"
@@ -114,24 +105,49 @@ const login = () => {
         <el-tabs v-model="activeName" @tab-click="handleTabClick">
           <el-tab-pane label="注册" name="registered">
             <el-form
-              ref="loginFormRef"
-              :rules="loginRule"
-              :model="loginForm"
+              ref="registFormRef"
+              :rules="registRule"
+              :model="registForm"
               label-width="80px"
             >
-              <el-form-item label="用户名" prop="username">
+              <el-form-item label="用户名" prop="account">
                 <el-input
                   class="w-full"
-                  v-model="loginForm.username"
+                  v-model="registForm.account"
                 ></el-input>
               </el-form-item>
               <el-form-item label="密码" prop="password">
                 <el-input
-                  v-model="loginForm.password"
+                  v-model="registForm.password"
                   type="password"
                   show-password
                 ></el-input>
               </el-form-item>
+              <el-form-item label="姓名" prop="name">
+                <el-input
+                  class="w-full"
+                  v-model="registForm.name"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="电话" prop="tel">
+                <el-input
+                  class="w-full"
+                  v-model="registForm.tel"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="性别" prop="sex">
+                <el-input
+                  class="w-full"
+                  v-model="registForm.sex"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="邮箱" prop="email">
+                <el-input
+                  class="w-full"
+                  v-model="registForm.email"
+                ></el-input>
+              </el-form-item>
+
               <div class="flex item-center justify-around">
                 <el-button round class="w-30%" type="primary" @click="login"
                   >注册</el-button
@@ -146,10 +162,10 @@ const login = () => {
               :model="loginForm"
               label-width="80px"
             >
-              <el-form-item label="用户名" prop="username">
+              <el-form-item label="用户名" prop="account">
                 <el-input
                   class="w-full"
-                  v-model="loginForm.username"
+                  v-model="loginForm.account"
                 ></el-input>
               </el-form-item>
               <el-form-item label="密码" prop="password">

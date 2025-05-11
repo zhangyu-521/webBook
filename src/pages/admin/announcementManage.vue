@@ -1,3 +1,9 @@
+<script lang="ts" setup>
+</script>
+
+
 <template>
-    系统公告管理
+    <div>
+        
+    </div>
 </template>

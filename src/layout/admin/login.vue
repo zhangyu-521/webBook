@@ -2,8 +2,9 @@
 import { reactive, ref } from 'vue';
 import { type FormInstance } from 'element-plus';
 import { useRouter } from 'vue-router';
+import { login as loginAPI } from '@/request/end';
 const loginRule = {
-  username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+  account: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
   password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
 };
 
@@ -12,16 +13,21 @@ const router = useRouter();
 const loginFormRef = ref<FormInstance | null>(null);
 
 const loginForm = reactive({
-  username: '',
+  account: '',
   password: '',
 });
 
-const login = () => {
-  loginFormRef?.value?.validate((valid) => {
+const login = async () => {
+  loginFormRef?.value?.validate(async (valid) => {
     // 校验通过
     if (valid) {
-      console.log(loginForm);
-      router.push('/admin');
+    console.log(loginForm);
+     const res = await loginAPI(loginForm)
+
+     console.log(res)
+     if(res) {
+       router.push('/admin/bookinfo');
+     }
     }
   });
 };
@@ -43,8 +49,8 @@ const login = () => {
         :model="loginForm"
         label-width="80px"
       >
-        <el-form-item label="用户名" prop="username">
-          <el-input class="w-full" v-model="loginForm.username"></el-input>
+        <el-form-item label="用户名" prop="account">
+          <el-input class="w-full" v-model="loginForm.account"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
           <el-input
