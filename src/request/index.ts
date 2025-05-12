@@ -21,33 +21,57 @@ axios.interceptors.request.use((config) => {
 
 axios.interceptors.response.use((config) => {
     // console.log(config, '响应头哦')
+    console.log(config, '响应头哦')
     close()
     return config
+}, (err) => {
+    switch (err.status) {
+        case 500:
+            ElMessage({
+                type: 'error',
+                message: `服务器错误`,
+            })
+            break;
+
+        default:
+            break;
+    }
+    close()
+
+    console.log(err, '响应头哦')
 })
 
 
 async function request<T>(url: string, method: string = 'get', data: any = {}, showMessage: boolean = true) {
-    const res = await axios({
-        url,
-        method,
-        data
-    })
-    let requestData = res.data
-    if (requestData.code === 200) {
-        if (showMessage) {
-            ElMessage({
-                type: 'success',
-                message: `操作成功`,
-            })
-        }
-        return requestData.data as T
-    } else {
-        ElMessage({
-            type: 'error',
-            message: requestData.message,
+    let requestData: any
+    try {
+        const res = await axios({
+            url,
+            method,
+            data
         })
-        return null
+        console.log(res, '请求结果')
+        requestData = res.data
+        if (requestData.code === 200) {
+            if (showMessage) {
+                ElMessage({
+                    type: 'success',
+                    message: `操作成功`,
+                })
+            }
+            return requestData.data as T
+        } else {
+            ElMessage({
+                type: 'error',
+                message: requestData.message,
+            })
+            return null
+        }
+    } catch (err) {
+        console.log(err, '请求错误')
     }
+
+
 }
 
 

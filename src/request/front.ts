@@ -7,6 +7,8 @@ export const BookInfoByName = (data: any) => request(`/api/User/BookInfoByName?n
 export const BookInfoByType = (data: any) => request(`/api/User/BookInfoByType?type=${data}`, "POST");
 export const BookInfos = () => request('/api/User/BookInfos', "GET", {}, false);
 export const addBasket = (data: any) => request(`/api/User/addBasket?number=${data}`, "POST");
+export const payOrders = (data: any) => request(`/api/User/payOrders?num=${data.num}&id=${data.id}`, "POST", {}, false);
 export const Notices = () => request('/api/User/Notices', "GET", {},false);
 export const getOrderByAcc = () => request('/api/User/getOrderByAcc', "GET", {},false);
+export const getBaskets = () => request('/api/User/getBaskets', "GET", {},false);
 export const getorders = () => request('/api/User/getorders', "GET", {},false);

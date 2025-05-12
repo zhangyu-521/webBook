@@ -7,6 +7,10 @@ import {
 } from '@/request/front';
 import { getAllCategory } from '@/request/end';
 import { onMounted, ref } from 'vue';
+import { useUserStore } from '@/pinia';
+import { ElMessage } from 'element-plus';
+const { userInfo } = useUserStore();
+
 
 const books = ref();
 const res: any = await BookInfos();
@@ -14,6 +18,13 @@ console.log(res);
 books.value = res.books;
 
 const addBasket = async (id: number) => {
+  if(!userInfo.account) {
+    ElMessage({
+      message: '请先登录',
+      type: 'error',
+    })
+    return
+  }
   const res = await AddBasketAPI(id);
   console.log(res);
 };

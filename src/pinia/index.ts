@@ -7,9 +7,10 @@ export const useUserStore = defineStore('main', () => {
     // other options...
 
     const userInfo = reactive({
-        username: 'admin',
-        password: '123456',
-        name: '张三'
+        username: '',
+        password: '',
+        name: '',
+        account: localStorage.getItem('account') || '',
     })
 
     return {

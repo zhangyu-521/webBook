@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { onMounted, reactive, ref } from 'vue';
-import {login as loginApi, signUp, Notices} from '@/request/front';
+import { login as loginApi, signUp, Notices } from '@/request/front';
 import { useUserStore } from '@/pinia';
-import { ElNotification, type FormInstance } from 'element-plus';
+import { ElMessage, ElNotification, type FormInstance } from 'element-plus';
 
 import { useRouter } from 'vue-router';
 const { userInfo } = useUserStore();
-
+const router = useRouter()
 const value4 = ref([]);
 const activeName = ref('login');
 const centerDialogVisible = ref(false);
@@ -42,62 +42,89 @@ const registForm = reactive({
   email: '',
   name: '',
   balance: 0,
-  sex: '',  
+  sex: '',
 });
 const loginForm = reactive({
   account: '',
   password: '',
 });
 
-const login = async() => {
-  loginFormRef?.value?.validate(async(valid) => {
+const login = async () => {
+  loginFormRef?.value?.validate(async (valid) => {
     // 校验通过
     if (valid) {
-      if(activeName.value === 'login') {
-        const res = await loginApi(loginForm);
-        console.log(userInfo)
-        console.log(res)
+      if (activeName.value === 'login') {
+        const res: any = await loginApi(loginForm);
+        userInfo.account = res.user.account;
+        localStorage.setItem('account', res.user.account);
+        console.log(userInfo);
+        console.log(res.user);
       } else {
         const res = await signUp(registForm);
-        console.log(res)
+        console.log(res);
       }
       centerDialogVisible.value = false;
     }
   });
 };
 
+
+const logout = () => {
+  localStorage.removeItem('account');
+  userInfo.account = '';
+}
+
+const shopCar = () => {
+  if(!userInfo.account) {
+    ElMessage.error('请先登录')
+    return
+  }
+  router.push('/shopCar');
+}
+
+const goOrder = () => {
+  if(!userInfo.account) {
+    ElMessage.error('请先登录')
+    return
+  }
+  router.push('/orders');
+}
+
 onMounted(async () => {
-  const res:any =  await Notices()
-  let data = res.notices[res.notices.length - 1]
-  console.log(res.notices[res.notices.length - 1])
+  const res: any = await Notices();
+  let data = res.notices[res.notices.length - 1];
+  console.log(res.notices[res.notices.length - 1]);
   ElNotification({
     title: data.title,
     message: data.detail,
     duration: 0,
-  })
-})
+  });
+});
 </script>
 
 <template>
   <div class="w-full h-full flex items-center justify-between">
     <!-- logo -->
-    <div @click="$router.push('/booksIndex')" class="flex justify-center items-center gap-2 cursor-pointer">
+    <div
+      @click="$router.push('/booksIndex')"
+      class="flex justify-center items-center gap-2 cursor-pointer"
+    >
       <img src="@/assets/vue.svg" alt="logo" />
       <h1>图书系统</h1>
     </div>
     <!-- 搜索 -->
 
     <!-- 右侧  -->
-    <div class="flex items-center gap-2 cursor-pointer">
-      <span @click="$router.push('/orders')">订单</span>
+    <div class="flex items-center gap-5 cursor-pointer">
+      <span @click="$router.push('/booksIndex')">首页</span>
+      <span @click="goOrder">订单</span>
       <span @click="$router.push('/admin/login')">后台</span>
-      <el-icon
-        class="cursor-pointer"
-        @click="$router.push('/shopCar')"
-        size="29"
-        ><Collection
-      /></el-icon>
-      <span @click="loginFront">登录</span>
+      <span @click="shopCar">收藏</span>
+      <div v-if="userInfo.account">
+        <span class="mr-5">当前账户:{{ userInfo.account }}</span>
+        <span @click="logout">退出登录</span>
+      </div>
+      <span v-else @click="loginFront">登录</span>
     </div>
 
     <el-dialog v-model="centerDialogVisible" width="30%" center>
@@ -124,28 +151,16 @@ onMounted(async () => {
                 ></el-input>
               </el-form-item>
               <el-form-item label="姓名" prop="name">
-                <el-input
-                  class="w-full"
-                  v-model="registForm.name"
-                ></el-input>
+                <el-input class="w-full" v-model="registForm.name"></el-input>
               </el-form-item>
               <el-form-item label="电话" prop="tel">
-                <el-input
-                  class="w-full"
-                  v-model="registForm.tel"
-                ></el-input>
+                <el-input class="w-full" v-model="registForm.tel"></el-input>
               </el-form-item>
               <el-form-item label="性别" prop="sex">
-                <el-input
-                  class="w-full"
-                  v-model="registForm.sex"
-                ></el-input>
+                <el-input class="w-full" v-model="registForm.sex"></el-input>
               </el-form-item>
               <el-form-item label="邮箱" prop="email">
-                <el-input
-                  class="w-full"
-                  v-model="registForm.email"
-                ></el-input>
+                <el-input class="w-full" v-model="registForm.email"></el-input>
               </el-form-item>
 
               <div class="flex item-center justify-around">
@@ -163,10 +178,7 @@ onMounted(async () => {
               label-width="80px"
             >
               <el-form-item label="用户名" prop="account">
-                <el-input
-                  class="w-full"
-                  v-model="loginForm.account"
-                ></el-input>
+                <el-input class="w-full" v-model="loginForm.account"></el-input>
               </el-form-item>
               <el-form-item label="密码" prop="password">
                 <el-input
