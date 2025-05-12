@@ -20,7 +20,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="bg-gray-100 mt-10vh">
+  <div class="bg-gray-100  mt-10vh">
     <el-empty description="暂无数据" v-if="!data.length"></el-empty>
     <div v-else>
       <el-card class="mb-6" v-for="item in data" :key="item.id">

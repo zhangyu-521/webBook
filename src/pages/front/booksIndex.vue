@@ -11,19 +11,18 @@ import { useUserStore } from '@/pinia';
 import { ElMessage } from 'element-plus';
 const { userInfo } = useUserStore();
 
-
 const books = ref();
 const res: any = await BookInfos();
 console.log(res);
 books.value = res.books;
 
 const addBasket = async (id: number) => {
-  if(!userInfo.account) {
+  if (!userInfo.account) {
     ElMessage({
       message: '请先登录',
       type: 'error',
-    })
-    return
+    });
+    return;
   }
   const res = await AddBasketAPI(id);
   console.log(res);
@@ -41,7 +40,7 @@ const searchByType = async (type: string) => {
   console.log(res);
   books.value = res.books;
   console.log('搜索');
-}
+};
 
 const categorys = ref();
 onMounted(async () => {
@@ -52,10 +51,10 @@ onMounted(async () => {
 
 <template>
   <div>
-    <div class="flex gap-2 flex-wrap mb-6">
+    <div class="flex gap-2 flex-wrap mb-6 mt-10vh">
       <p>分类：</p>
       <el-button
-      size="small"
+        size="small"
         plain
         v-for="category in categorys"
         :key="category.id"

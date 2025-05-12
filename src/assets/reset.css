@@ -52,3 +52,8 @@ table {
 * {
   box-sizing: border-box;
 }
+
+
+body {
+  background-color: #f3f4f6;
+}

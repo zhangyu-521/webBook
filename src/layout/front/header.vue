@@ -6,7 +6,7 @@ import { ElMessage, ElNotification, type FormInstance } from 'element-plus';
 
 import { useRouter } from 'vue-router';
 const { userInfo } = useUserStore();
-const router = useRouter()
+const router = useRouter();
 const value4 = ref([]);
 const activeName = ref('login');
 const centerDialogVisible = ref(false);
@@ -68,27 +68,26 @@ const login = async () => {
   });
 };
 
-
 const logout = () => {
   localStorage.removeItem('account');
   userInfo.account = '';
-}
+};
 
 const shopCar = () => {
-  if(!userInfo.account) {
-    ElMessage.error('请先登录')
-    return
+  if (!userInfo.account) {
+    ElMessage.error('请先登录');
+    return;
   }
   router.push('/shopCar');
-}
+};
 
 const goOrder = () => {
-  if(!userInfo.account) {
-    ElMessage.error('请先登录')
-    return
+  if (!userInfo.account) {
+    ElMessage.error('请先登录');
+    return;
   }
   router.push('/orders');
-}
+};
 
 onMounted(async () => {
   const res: any = await Notices();
@@ -103,7 +102,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="w-full h-full flex items-center justify-between">
+  <div class="fixed px-20 w-full h-10vh bg-light-50 flex items-center justify-between">
     <!-- logo -->
     <div
       @click="$router.push('/booksIndex')"
@@ -126,76 +125,72 @@ onMounted(async () => {
       </div>
       <span v-else @click="loginFront">登录</span>
     </div>
-
-    <el-dialog v-model="centerDialogVisible" width="30%" center>
-      <div>
-        <el-tabs v-model="activeName" @tab-click="handleTabClick">
-          <el-tab-pane label="注册" name="registered">
-            <el-form
-              ref="registFormRef"
-              :rules="registRule"
-              :model="registForm"
-              label-width="80px"
-            >
-              <el-form-item label="用户名" prop="account">
-                <el-input
-                  class="w-full"
-                  v-model="registForm.account"
-                ></el-input>
-              </el-form-item>
-              <el-form-item label="密码" prop="password">
-                <el-input
-                  v-model="registForm.password"
-                  type="password"
-                  show-password
-                ></el-input>
-              </el-form-item>
-              <el-form-item label="姓名" prop="name">
-                <el-input class="w-full" v-model="registForm.name"></el-input>
-              </el-form-item>
-              <el-form-item label="电话" prop="tel">
-                <el-input class="w-full" v-model="registForm.tel"></el-input>
-              </el-form-item>
-              <el-form-item label="性别" prop="sex">
-                <el-input class="w-full" v-model="registForm.sex"></el-input>
-              </el-form-item>
-              <el-form-item label="邮箱" prop="email">
-                <el-input class="w-full" v-model="registForm.email"></el-input>
-              </el-form-item>
-
-              <div class="flex item-center justify-around">
-                <el-button round class="w-30%" type="primary" @click="login"
-                  >注册</el-button
-                >
-              </div>
-            </el-form>
-          </el-tab-pane>
-          <el-tab-pane label="登录" name="login">
-            <el-form
-              ref="loginFormRef"
-              :rules="loginRule"
-              :model="loginForm"
-              label-width="80px"
-            >
-              <el-form-item label="用户名" prop="account">
-                <el-input class="w-full" v-model="loginForm.account"></el-input>
-              </el-form-item>
-              <el-form-item label="密码" prop="password">
-                <el-input
-                  v-model="loginForm.password"
-                  type="password"
-                  show-password
-                ></el-input>
-              </el-form-item>
-              <div class="flex item-center justify-around">
-                <el-button round class="w-30%" type="primary" @click="login"
-                  >登录</el-button
-                >
-              </div>
-            </el-form>
-          </el-tab-pane>
-        </el-tabs>
-      </div>
-    </el-dialog>
   </div>
+  <el-dialog z-index="9999" v-model="centerDialogVisible" width="30%" center>
+    <div>
+      <el-tabs v-model="activeName" @tab-click="handleTabClick">
+        <el-tab-pane label="注册" name="registered">
+          <el-form
+            ref="registFormRef"
+            :rules="registRule"
+            :model="registForm"
+            label-width="80px"
+          >
+            <el-form-item label="用户名" prop="account">
+              <el-input class="w-full" v-model="registForm.account"></el-input>
+            </el-form-item>
+            <el-form-item label="密码" prop="password">
+              <el-input
+                v-model="registForm.password"
+                type="password"
+                show-password
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="姓名" prop="name">
+              <el-input class="w-full" v-model="registForm.name"></el-input>
+            </el-form-item>
+            <el-form-item label="电话" prop="tel">
+              <el-input class="w-full" v-model="registForm.tel"></el-input>
+            </el-form-item>
+            <el-form-item label="性别" prop="sex">
+              <el-input class="w-full" v-model="registForm.sex"></el-input>
+            </el-form-item>
+            <el-form-item label="邮箱" prop="email">
+              <el-input class="w-full" v-model="registForm.email"></el-input>
+            </el-form-item>
+
+            <div class="flex item-center justify-around">
+              <el-button round class="w-30%" type="primary" @click="login"
+                >注册</el-button
+              >
+            </div>
+          </el-form>
+        </el-tab-pane>
+        <el-tab-pane label="登录" name="login">
+          <el-form
+            ref="loginFormRef"
+            :rules="loginRule"
+            :model="loginForm"
+            label-width="80px"
+          >
+            <el-form-item label="用户名" prop="account">
+              <el-input class="w-full" v-model="loginForm.account"></el-input>
+            </el-form-item>
+            <el-form-item label="密码" prop="password">
+              <el-input
+                v-model="loginForm.password"
+                type="password"
+                show-password
+              ></el-input>
+            </el-form-item>
+            <div class="flex item-center justify-around">
+              <el-button round class="w-30%" type="primary" @click="login"
+                >登录</el-button
+              >
+            </div>
+          </el-form>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
+  </el-dialog>
 </template>
