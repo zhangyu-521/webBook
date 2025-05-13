@@ -10,7 +10,8 @@ export const useUserStore = defineStore('main', () => {
         username: '',
         password: '',
         name: '',
-        account: localStorage.getItem('account') || '',
+        // account: localStorage.getItem('account') || '',
+        account: '',
     })
 
     return {
