@@ -54,6 +54,7 @@ onMounted(async () => {
     <div class="flex gap-2 flex-wrap mb-6 mt-10vh">
       <p>分类：</p>
       <el-button
+        type="primary"
         size="small"
         plain
         v-for="category in categorys"
@@ -72,21 +73,23 @@ onMounted(async () => {
       />
       <el-button @click="search" type="primary">搜索</el-button>
     </div>
-
-    <el-card v-for="book in books" :key="book.id">
-      <div class="flex items-center justify-around">
-        <img class="w-40 h-50" :src="book.pic" alt="" />
-        <div class="flex flex-col gap-4">
-          <div>书名：{{ book.name }}</div>
-          <div>详情：{{ book.detail }}</div>
-          <div>价格：{{ book.price }}</div>
-          <div>剩余：{{ book.num }}</div>
-          <el-button @click="addBasket(book.number)" size="small" type="primary"
-            >加入收藏夹</el-button
-          >
+    <div class="flex flex-wrap gap-4">
+      <el-card class="w-30%" v-for="book in books" :key="book.id">
+        <div class="flex items-center gap-10">
+          <img class="w-40 h-50" :src="book.pic" alt="" />
+          <div class="flex flex-col gap-4">
+            <div>书名：{{ book.name }}</div>
+            <div>详情：{{ book.detail }}</div>
+            <div>价格：{{ book.price }}</div>
+            <div>剩余：{{ book.num }}</div>
+            <el-button @click="addBasket(book.number)" size="small" type="primary"
+              >加入收藏夹</el-button
+            >
+          </div>
         </div>
-      </div>
-    </el-card>
+      </el-card>
+
+    </div>
 
     <el-empty description="暂无数据" v-if="books.length === 0"></el-empty>
   </div>

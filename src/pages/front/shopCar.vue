@@ -23,23 +23,26 @@ onMounted(async () => {
   <div class="bg-gray-100  mt-10vh">
     <el-empty description="暂无数据" v-if="!data.length"></el-empty>
     <div v-else>
-      <el-card class="mb-6" v-for="item in data" :key="item.id">
-        <div class="flex items-center justify-around">
-          <img class="w-40 h-50" :src="item.pic" alt="" />
-          <div class="flex flex-col gap-4">
-            <div>书名：{{ item.name }}</div>
-            <div>详情：{{ item.detail }}</div>
-            <div>价格：{{ item.price }}</div>
-            <div>剩余：{{ item.num }}</div>
-            <el-button
-              @click="buy(item)"
-              size="small"
-              type="primary"
-              >购买</el-button
-            >
+      <div class="flex flex-wrap gap-5">
+        <el-card class="mb-6 w-30%" v-for="item in data" :key="item.id">
+          <div class="flex items-center justify-around gap-5">
+            <img class="w-40 h-50" :src="item.pic" alt="" />
+            <div class="flex flex-col gap-4">
+              <div>书名：{{ item.name }}</div>
+              <div>详情：{{ item.detail }}</div>
+              <div>价格：{{ item.price }}</div>
+              <div>剩余：{{ item.num }}</div>
+              <el-button
+                @click="buy(item)"
+                size="small"
+                type="primary"
+                >购买</el-button
+              >
+            </div>
           </div>
-        </div>
-      </el-card>
+        </el-card>
+
+      </div>
     </div>
   </div>
 </template>

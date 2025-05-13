@@ -11,7 +11,8 @@ const value4 = ref([]);
 const activeName = ref('login');
 const centerDialogVisible = ref(false);
 
-const loginFront = () => {
+const loginFront = (val: any) => {
+  activeName.value = val;
   centerDialogVisible.value = true;
 };
 
@@ -102,14 +103,14 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="fixed px-20 w-full h-10vh bg-light-50 flex items-center justify-between">
+  <div class="fixed px-20 w-full h-10vh bg-[#409eff] flex items-center justify-between">
     <!-- logo -->
     <div
       @click="$router.push('/booksIndex')"
       class="flex justify-center items-center gap-2 cursor-pointer"
     >
       <img src="@/assets/vue.svg" alt="logo" />
-      <h1>图书系统</h1>
+      <h1 class="text-3xl">图书系统</h1>
     </div>
     <!-- 搜索 -->
 
@@ -123,7 +124,10 @@ onMounted(async () => {
         <span class="mr-5">当前账户:{{ userInfo.account }}</span>
         <span @click="logout">退出登录</span>
       </div>
-      <span v-else @click="loginFront">登录</span>
+      <div v-else>
+        <span class="mr-5" @click="loginFront('login')">登录</span>
+        <span @click="loginFront('registered')">注册</span>
+      </div>
     </div>
   </div>
   <el-dialog z-index="9999" v-model="centerDialogVisible" width="30%" center>
