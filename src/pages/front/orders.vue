@@ -37,7 +37,7 @@ console.log(data);
             <el-tag v-else-if="item.status == '已取消'" class="ml-2" type="info"
               >已取消</el-tag
             >
-            <el-tag v-else class="ml-2" type="danger">未知状态</el-tag>
+            <el-tag v-else class="ml-2" type="danger">{{ item.status }}</el-tag>
             <span class="mt-3 text-center">{{ item.time }}</span>
             <span class="mt-3 text-center">{{ item.account }}</span>
           </div>

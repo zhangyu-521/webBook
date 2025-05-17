@@ -73,6 +73,7 @@ const delBook = async (id: number) => {
       <el-table-column prop="name" label="书名" />
       <el-table-column prop="num" label="数量" />
       <el-table-column prop="type" label="类型" />
+      <el-table-column prop="number" label="图书编号" />
       <el-table-column prop="pic" label="pic">
         <template #default="scope">
           <img :src="scope.row.pic" class="w-20 h-20" />
@@ -107,6 +108,9 @@ const delBook = async (id: number) => {
         </el-form-item>
         <el-form-item label="数量" prop="num">
           <el-input v-model="dialogInfo.form.num" />
+        </el-form-item>
+        <el-form-item label="图书编号" prop="number">
+          <el-input v-model="dialogInfo.form.number" />
         </el-form-item>
         <el-form-item label="价格" prop="price">
           <el-input v-model="dialogInfo.form.price" />
